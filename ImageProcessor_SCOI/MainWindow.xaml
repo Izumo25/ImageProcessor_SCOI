@@ -15,9 +15,8 @@
         <!-- Правая часть: Управление -->
         <StackPanel Grid.Column="1" Background="#EEE">
             <Button x:Name="AddImageBtn" Content="Добавить изображение" Margin="10" Click="AddImage_Click"/>
+            <Button x:Name="GradationBtn" Content="Градационные преобразования" Margin="10" Click="OpenGradationWindow_Click"/>
             <Button x:Name="ProcessBtn" Content="Выполнить" Margin="10" Click="Process_Click"/>
-
-           
 
             <!-- Список слоёв -->
             <ScrollViewer MaxHeight="500">

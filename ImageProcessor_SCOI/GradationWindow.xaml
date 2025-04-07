@@ -1,0 +1,71 @@
+﻿<Window x:Class="ImageProcessor_SCOI.GradationWindow"
+            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+            xmlns:skia="clr-namespace:SkiaSharp.Views.WPF;assembly=SkiaSharp.Views.WPF"
+            xmlns:local="clr-namespace:ImageProcessor_SCOI"
+            mc:Ignorable="d"
+            Title="Градационные преобразования" 
+            Height="510" 
+            Width="600"
+            WindowStartupLocation="CenterOwner">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="0.5*"/>
+            <RowDefinition Height="0.2*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Верхняя часть: редактор кривой + превью -->
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Редактор кривой (левая часть) -->
+            <Border Grid.Column="0" BorderBrush="Gray" BorderThickness="1" Margin="5">
+                <Canvas x:Name="CurveCanvas" Background="White" MouseDown="CurveCanvas_MouseDown" 
+                            MouseMove="CurveCanvas_MouseMove" MouseUp="CurveCanvas_MouseUp"
+                            SizeChanged="CurveCanvas_SizeChanged">
+                    <Polyline x:Name="CurveLine" Stroke="Black" StrokeThickness="2"/>
+                    <Line x:Name="XAxis" Stroke="Gray" StrokeThickness="1" X1="0" Y1="255" X2="255" Y2="255"/>
+                    <Line x:Name="YAxis" Stroke="Gray" StrokeThickness="1" X1="0" Y1="0" X2="0" Y2="255"/>
+                </Canvas>
+            </Border>
+
+            <!-- Превью изображения (правая часть) -->
+            <Border Grid.Column="1" BorderBrush="Gray" BorderThickness="1" Margin="5">
+                <Image x:Name="PreviewImage" Stretch="Uniform"/>
+            </Border>
+        </Grid>
+
+        <!-- Нижняя часть: гистограмма -->
+        <Border Grid.Row="1" BorderBrush="Gray" BorderThickness="1" Margin="5">
+            <Canvas x:Name="HistogramCanvas" Background="White" SizeChanged="HistogramCanvas_SizeChanged"/>
+        </Border>
+
+
+        <!-- Кнопки управления -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10">
+
+            <ComboBox x:Name="TransformComboBox" 
+                  Width="150" 
+                  Margin="5" 
+                  SelectedIndex="0"
+                  SelectionChanged="TransformComboBox_SelectionChanged">
+                <ComboBoxItem>Тождественная</ComboBoxItem>
+                <ComboBoxItem>Логарифм</ComboBoxItem>
+                <ComboBoxItem>Корень n-степени</ComboBoxItem>
+                <ComboBoxItem>n-ная степень</ComboBoxItem>
+                <ComboBoxItem>Обратный логарифм</ComboBoxItem>
+            </ComboBox>
+
+            <Button Content="Сбросить" Width="100" Margin="5" Click="Reset_Click"/>
+            <Button Content="Применить" Width="100" Margin="5" Click="Apply_Click"/>
+            <Button Content="Сохранить" Width="100" Margin="5" Click="Save_Click"/>
+
+        </StackPanel>
+    </Grid>
+</Window>

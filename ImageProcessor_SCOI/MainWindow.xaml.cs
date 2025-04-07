@@ -34,11 +34,14 @@ namespace ImageProcessor_SCOI
                         Image = bitmap,
                         Opacity = 1.0
                     });
+
+                    Process_Click(null, null);
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show($"Ошибка загрузки изображения: {ex.Message}");
                 }
+
             }
         }
 
@@ -153,42 +156,18 @@ namespace ImageProcessor_SCOI
             }
         }
 
-        //private void ApplyCurve_Click(object sender, RoutedEventArgs e)
-        //{
-        //    // Проверяем, есть ли изображение для обработки
-        //    if (PreviewImage.Source == null || !(PreviewImage.Source is BitmapSource originalImage))
-        //    {
-        //        MessageBox.Show("Сначала загрузите изображение", "Ошибка",
-        //                       MessageBoxButton.OK, MessageBoxImage.Warning);
-        //        return;
-        //    }
+        private void OpenGradationWindow_Click(object sender, RoutedEventArgs e)
+        {
+            if (Layers.Count == 0)
+            {
+                MessageBox.Show("Добавьте хотя бы одно изображение");
+                return;
+            }
 
-        //    try
-        //    {
-        //        // 1. Получаем функцию преобразования из редактора кривых
-        //        Func<byte, byte> curveFunction = _curveEditor.GetCurveFunction();
-
-        //        // 2. Создаем WriteableBitmap из исходного изображения
-        //        WriteableBitmap sourceBitmap = new WriteableBitmap(originalImage);
-
-        //        // 3. Применяем кривую к изображению
-        //        WriteableBitmap processedBitmap = GradationFunction.ApplyCurve(sourceBitmap, curveFunction);
-
-        //        // 4. Обновляем превью
-        //        PreviewImage.Source = processedBitmap;
-
-        //        // 5. Обновляем гистограмму (если Canvas есть в разметке)
-        //        if (HistogramCanvas != null)
-        //        {
-        //            HistogramBuilder.DrawHistogram(processedBitmap, HistogramCanvas);
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        MessageBox.Show($"Ошибка при применении кривой: {ex.Message}", "Ошибка",
-        //                       MessageBoxButton.OK, MessageBoxImage.Error);
-        //    }
-        //}
+            if (PreviewImage.Source == null) return;
+            var window = new GradationWindow((BitmapSource)PreviewImage.Source);
+            window.ShowDialog();
+        }
 
 
     }
