@@ -4,68 +4,118 @@
         xmlns:local="clr-namespace:ImageProcessor_SCOI"
         Title="ImageProcessor" Height="600" Width="800">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="250"/>
-        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Верхняя панель меню -->
+            <RowDefinition Height="*"/>
+            <!-- Основная область -->
+        </Grid.RowDefinitions>
 
-        <!-- Левая часть: Preview -->
-        <Image x:Name="PreviewImage" Grid.Column="0" Stretch="Uniform"/>
+        <!-- Верхняя панель меню -->
+        <Menu Grid.Row="0" Background="#DDD">
+            <!-- Здесь можно добавить пункты меню -->
+            <MenuItem Header="Файл">
+                <MenuItem Header="Открыть"/>
+                <MenuItem Header="Сохранить"/>
+                <Separator/>
+                <MenuItem Header="Выход"/>
+            </MenuItem>
+            <MenuItem Header="Правка"/>
+            <MenuItem Header="Справка"/>
+        </Menu>
 
-        <!-- Правая часть: Управление -->
-        <StackPanel Grid.Column="1" Background="#EEE">
-            <Button x:Name="AddImageBtn" Content="Добавить изображение" Margin="10" Click="AddImage_Click"/>
-            <Button x:Name="GradationBtn" Content="Градационные преобразования" Margin="10" Click="OpenGradationWindow_Click"/>
-            <Button x:Name="ProcessBtn" Content="Выполнить" Margin="10" Click="Process_Click"/>
+        <!-- Основная область (прежнее содержимое) -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="250"/>
+            </Grid.ColumnDefinitions>
 
-            <!-- Список слоёв -->
-            <ScrollViewer MaxHeight="500">
-                <ItemsControl x:Name="LayersList" ItemsSource="{Binding Layers}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Border Margin="5" Padding="5" Background="White" BorderBrush="Gray" BorderThickness="1">
-                                <StackPanel>
-                                    <Image Source="{Binding Image}" Height="50" Stretch="UniformToFill"/>
-                                    <ComboBox ItemsSource="{Binding BlendModes}" 
-                                              SelectedItem="{Binding BlendMode, Mode=TwoWay}" 
-                                              Margin="0 5"/>
+            <!-- Левая часть: Preview -->
+            <Image x:Name="PreviewImage" Grid.Column="0" Stretch="Uniform"/>
 
-                                    <!-- Чекбокс и слайдер прозрачности -->
-                                    <CheckBox Content="Применить прозрачность"
-                                              IsChecked="{Binding IsTransparencyEnabled, Mode=TwoWay}"
-                                              Margin="0 5"/>
+            <!-- Правая часть: Управление -->
+            <StackPanel Grid.Column="1" Background="#EEE">
+                <Button x:Name="AddImageBtn" Content="Добавить изображение" Margin="10" Click="AddImage_Click"/>
+                <ComboBox x:Name="MethodComboBox" Margin="10" SelectedIndex="0" ToolTip="Выберите метод бинаризации">
+                    <ComboBoxItem Content="Выберите метод бинаризации"/>
+                    <ComboBoxItem Content="Гаврилов"/>
+                    <ComboBoxItem Content="Отсу"/>
+                    <ComboBoxItem Content="Ниблек"/>
+                    <ComboBoxItem Content="Сауволы"/>
+                    <ComboBoxItem Content="Вульф"/>
+                    <ComboBoxItem Content="Брэдли-Рота"/>
+                </ComboBox>
+                <Slider x:Name="SensitivitySlider" Minimum="-1" Maximum="1" Value="-0.2" Width="150" Margin="10,0"  ToolTip="Чувствительность (k)"/>
+                <Button x:Name="GradationBtn" Content="Градационные преобразования" Margin="10" Click="OpenGradationWindow_Click"/>
+                <!-- В существующий StackPanel правой панели добавьте кнопку -->
+                <Button x:Name="FiltersButton" 
+                    Content="Фильтры" 
+                    Margin="10" 
+                    Click="OpenFilters_Click"/>
+                
+                <!--<Button x:Name="FrequencyFilterButton" 
+                    Content="Частотные фильтры" 
+                    Margin="10" 
+                    Click="FrequencyFilterButton_Click"/>-->
 
-                                    <Slider Value="{Binding Opacity, Mode=TwoWay}"
-                                            Minimum="0"
-                                            Maximum="1"
-                                            TickFrequency="0.1"
-                                            IsEnabled="{Binding IsTransparencyEnabled}"
-                                            Margin="0 5"/>
+                <Button x:Name="FurieWindow" 
+                    Content="ДПФ" 
+                    Margin="10" 
+                    Click="FurieWindowButton_Click"/>       
 
-                                    <!-- Управление цветовыми каналами -->
-                                    <StackPanel Orientation="Horizontal" Margin="0 5">
-                                        <CheckBox IsChecked="{Binding RedChannelEnabled}" 
-                                                  Content="R" Margin="0 0 5 0"/>
-                                        <CheckBox IsChecked="{Binding GreenChannelEnabled}" 
-                                                  Content="G" Margin="0 0 5 0"/>
-                                        <CheckBox IsChecked="{Binding BlueChannelEnabled}" 
-                                                  Content="B"/>
+                <!-- Изначально выключена -->
+                <Button x:Name="ProcessBtn" Content="Выполнить" Margin="10" Click="Process_Click"/>
+
+                <!-- Список слоёв -->
+                <ScrollViewer MaxHeight="500">
+                    <ItemsControl x:Name="LayersList" ItemsSource="{Binding Layers}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Margin="5" Padding="5" Background="White" BorderBrush="Gray" BorderThickness="1">
+                                    <StackPanel>
+                                        <Image Source="{Binding Image}" Height="50" Stretch="UniformToFill"/>
+                                        <ComboBox ItemsSource="{Binding BlendModes}" 
+                                                  SelectedItem="{Binding BlendMode, Mode=TwoWay}" 
+                                                  Margin="0 5"/>
+
+                                        <!-- Чекбокс и слайдер прозрачности -->
+                                        <CheckBox Content="Применить прозрачность"
+                                                  IsChecked="{Binding IsTransparencyEnabled, Mode=TwoWay}"
+                                                  Margin="0 5"/>
+
+                                        <Slider Value="{Binding Opacity, Mode=TwoWay}"
+                                                Minimum="0"
+                                                Maximum="1"
+                                                TickFrequency="0.1"
+                                                IsEnabled="{Binding IsTransparencyEnabled}"
+                                                Margin="0 5"/>
+
+                                        <!-- Управление цветовыми каналами -->
+                                        <StackPanel Orientation="Horizontal" Margin="0 5">
+                                            <CheckBox IsChecked="{Binding RedChannelEnabled}" 
+                                                      Content="R" Margin="0 0 5 0"/>
+                                            <CheckBox IsChecked="{Binding GreenChannelEnabled}" 
+                                                      Content="G" Margin="0 0 5 0"/>
+                                            <CheckBox IsChecked="{Binding BlueChannelEnabled}" 
+                                                      Content="B"/>
+                                        </StackPanel>
+
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                            <Button Content="↑" Width="30" Margin="2" Click="MoveUp_Click"
+                                                    CommandParameter="{Binding}"/>
+                                            <Button Content="↓" Width="30" Margin="2" Click="MoveDown_Click"
+                                                    CommandParameter="{Binding}"/>
+                                            <Button Content="×" Width="30" Margin="2" Click="RemoveLayer_Click"
+                                                    CommandParameter="{Binding}"/>
+                                        </StackPanel>
                                     </StackPanel>
-
-                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                        <Button Content="↑" Width="30" Margin="2" Click="MoveUp_Click"
-                                                CommandParameter="{Binding}"/>
-                                        <Button Content="↓" Width="30" Margin="2" Click="MoveDown_Click"
-                                                CommandParameter="{Binding}"/>
-                                        <Button Content="×" Width="30" Margin="2" Click="RemoveLayer_Click"
-                                                CommandParameter="{Binding}"/>
-                                    </StackPanel>
-                                </StackPanel>
-                            </Border>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </ScrollViewer>
-        </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </StackPanel>
+        </Grid>
     </Grid>
 </Window>

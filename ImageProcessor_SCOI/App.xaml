@@ -1,9 +1,96 @@
-﻿<Application x:Class="ImageProcessor_SCOI.App"
+﻿<!--<Application x:Class="ImageProcessor_SCOI.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:ImageProcessor_SCOI"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
          
+    </Application.Resources>
+</Application>-->
+
+<Application x:Class="ImageProcessor_SCOI.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+
+        <!-- Цвета по правилу 60-30-10 -->
+        <SolidColorBrush x:Key="PrimaryColor" Color="#FFFFFF"/>
+        <!-- 60% - белый -->
+        <SolidColorBrush x:Key="SecondaryColor" Color="#80000000"/>
+        <!-- 30% - черный с 50% прозрачностью -->
+        <!-- 30% - черный -->
+        <SolidColorBrush x:Key="AccentColor" Color="#0078D4"/>
+        <!-- 10% - синий -->
+        <!-- 10% - синий (Microsoft Fluent) -->
+
+        <!-- Базовые стили для окон -->
+        <Style TargetType="Window">
+            <Setter Property="Background" Value="{DynamicResource PrimaryColor}"/>
+            <Setter Property="Foreground" Value="{DynamicResource SecondaryColor}"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+
+        <!-- Стиль для GroupBox -->
+        <Style TargetType="GroupBox">
+            <Setter Property="BorderBrush" Value="{DynamicResource SecondaryColor}"/>
+            <Setter Property="Foreground" Value="{DynamicResource SecondaryColor}"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+        <!-- Стиль для кнопок -->
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="{DynamicResource AccentColor}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="10 5"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Height" Value="25"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="4">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#0063B3"/>
+                    <!-- Темнее синего -->
+                    <Setter Property="Opacity" Value="0.9"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Стиль для текстовых полей -->
+        <Style TargetType="TextBox">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource SecondaryColor}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Margin" Value="0 0 0 10"/>
+        </Style>
+
+        <!-- Стиль для RichTextBox -->
+        <Style TargetType="RichTextBox">
+            <Setter Property="BorderBrush" Value="{DynamicResource SecondaryColor}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Margin" Value="5"/>
+        </Style>
+
+        <!-- Стиль для ToolBar -->
+        <Style TargetType="ToolBar">
+            <Setter Property="Background" Value="{DynamicResource PrimaryColor}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource SecondaryColor}"/>
+        </Style>
+
     </Application.Resources>
 </Application>
